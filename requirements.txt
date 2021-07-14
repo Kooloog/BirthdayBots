@@ -1,5 +1,3 @@
-imgur-downloader
 tweepy~=3.10.0
-ImgurDownloader~=1.0
 requests~=2.25.1
 schedule~=1.1.0
