@@ -4,11 +4,7 @@ import schedule
 
 
 def run_code():
-    os.system("python3 main.py")
-    time.sleep(5)
-    os.system("python3 principal.py")
-    time.sleep(60)
-    print("Done!")
+    os.system("python3 post_to_bot.py")
 
 
 schedule.every().day.at("14:00").do(run_code)
