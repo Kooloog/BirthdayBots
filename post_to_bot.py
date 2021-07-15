@@ -20,7 +20,7 @@ aces_api = tweepy.API(aces_auth)
 # CONNECTING TO THE FIRE EMBLEM BOT ACCOUNT
 fe_auth = tweepy.OAuthHandler(apikeys.fe_consumer_key, apikeys.fe_consumer_secret)
 fe_auth.set_access_token(apikeys.fe_access_token, apikeys.fe_access_secret)
-fe_api = tweepy.API(acen_auth)
+fe_api = tweepy.API(fe_auth)
 
 
 # Receives a month and a day as integers, and converts the date to a proper string like "July 13th" or "March 21st".
