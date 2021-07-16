@@ -24,16 +24,16 @@ fe_api = tweepy.API(fe_auth)
 
 
 # Receives a month and a day as integers, and converts the date to a proper string like "July 13th" or "March 21st".
-def get_day_string(month, day):
+def get_day_string(_month, _day):
     date_end = "th"
-    if day == 1 or day == 21 or day == 31:
+    if _day == 1 or _day == 21 or _day == 31:
         date_end = "st"
-    elif day == 2 or day == 22:
+    elif _day == 2 or _day == 22:
         date_end = "nd"
-    elif day == 3 or day == 23:
+    elif _day == 3 or _day == 23:
         date_end = "rd"
 
-    return calendar.month_name[int(month)] + " " + str(day) + date_end
+    return calendar.month_name[int(_month)] + " " + str(_day) + date_end
 
 
 # Gets all info from the character stored in the birthday variable, creates the necessary strings, downloads their
