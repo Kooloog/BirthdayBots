@@ -46,7 +46,11 @@ def convert(birthday):
         status = f"Today, {get_day_string(birthday[0], birthday[1])}, is {birthday[2]}'s{birthday[5]}birthday!"
     else:
         locale.setlocale(locale.LC_ALL, 'es_ES')
-        status = f"Hoy, {birthday[1]} de {calendar.month_name[int(birthday[0])]}, ¡es el cumpleaños de {birthday[2]}!"
+        status = f"Hoy, {birthday[1]} de {calendar.month_name[int(birthday[0])]}, ¡es el cumpleaños de "
+        if birthday[5] != ' ':
+            status += f"{birthday[2]}{birthday[5]}!"
+        else:
+            status += f"{birthday[2]}!"
 
     # STEP 2: Get the tweet's image from Imgur. The databases contain the link to each character's picture.
     imgur_get = requests.get("https://i.imgur.com/" + birthday[3], allow_redirects=True)
