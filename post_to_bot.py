@@ -39,13 +39,12 @@ def get_day_string(_month, _day):
 # Gets all info from the character stored in the birthday variable, creates the necessary strings, downloads their
 # respective image from imgur and then posts the result on the right bot account.
 def convert(birthday):
-
     # STEP 1: Generate the tweet's text, language depends on the bot.
     if birthday[4] == 'ACEN' or birthday[4] == 'FE':
-        locale.setlocale(locale.LC_ALL, 'en_US')
+        locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         status = f"Today, {get_day_string(birthday[0], birthday[1])}, is {birthday[2]}'s{birthday[5]}birthday!"
     else:
-        locale.setlocale(locale.LC_ALL, 'es_ES')
+        locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
         status = f"Hoy, {birthday[1]} de {calendar.month_name[int(birthday[0])]}, ¡es el cumpleaños de "
         if birthday[5] != ' ':
             status += f"{birthday[2]}{birthday[5]}!"
@@ -57,12 +56,18 @@ def convert(birthday):
     open('picture.png', 'wb').write(imgur_get.content)
 
     # STEP 3: Post tweet (with both text and media) to the correct account.
-    if birthday[4] == 'ACEN':
-        acen_api.update_with_media('picture.png', status)
-    elif birthday[4] == 'ACES':
-        aces_api.update_with_media('picture.png', status)
-    elif birthday[4] == 'FE':
-        fe_api.update_with_media('picture.png', status)
+    # UPDATE: Added loop due to common over-capacity errors that have been appearing lately
+    while True:
+        try:
+            if birthday[4] == 'ACEN':
+                acen_api.update_with_media('picture.png', status)
+            elif birthday[4] == 'ACES':
+                aces_api.update_with_media('picture.png', status)
+            elif birthday[4] == 'FE':
+                fe_api.update_with_media('picture.png', status)
+        except tweepy.error.TweepError:
+            continue
+        break
 
     os.remove('picture.png')
 
