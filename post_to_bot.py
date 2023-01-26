@@ -26,24 +26,34 @@ fe_api = tweepy.API(fe_auth)
 # Receives a month and a day as integers, and converts the date to a proper string like "July 13th" or "March 21st".
 def get_day_string(_month, _day):
     date_end = "th"
-    if _day == 1 or _day == 21 or _day == 31:
+    print(_day)
+    if _day == '1' or _day == '21' or _day == '31':
         date_end = "st"
-    elif _day == 2 or _day == 22:
+    elif _day == '2' or _day == '22':
         date_end = "nd"
-    elif _day == 3 or _day == 23:
+    elif _day == '3' or _day == '23':
         date_end = "rd"
 
+    print(date_end)
     return calendar.month_name[int(_month)] + " " + str(_day) + date_end
 
 
 # Gets all info from the character stored in the birthday variable, creates the necessary strings, downloads their
 # respective image from imgur and then posts the result on the right bot account.
 def convert(birthday):
+    status = ""
+    posted = False
+
     # STEP 1: Generate the tweet's text, language depends on the bot.
-    if birthday[4] == 'ACEN' or birthday[4] == 'FE':
+    if birthday[4] == 'ACEN' or birthday[4] == 'FE' or birthday[4] == 'ENGAGE':
         locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         status = f"Today, {get_day_string(birthday[0], birthday[1])}, is {birthday[2]}'s{birthday[5]}birthday!"
-    else:
+
+        # TEMPORARY: FE Engage Characters
+        if birthday[4] == 'ENGAGE':
+            status += " #FireEmblemEngage"
+
+    elif birthday[4] == 'ACES':
         locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
         status = f"Hoy, {birthday[1]} de {calendar.month_name[int(birthday[0])]}, ¡es el cumpleaños de "
         if birthday[5] != ' ':
@@ -56,16 +66,22 @@ def convert(birthday):
     open('picture.png', 'wb').write(imgur_get.content)
 
     # STEP 3: Post tweet (with both text and media) to the correct account.
-    # UPDATE: Added loop due to common over-capacity errors that have been appearing lately
+    # UPDATE: Added loop due to common capacity errors that have been appearing lately
     while True:
         try:
-            if birthday[4] == 'ACEN':
+            if birthday[4] == 'ACEN' and not posted:
                 acen_api.update_with_media('picture.png', status)
-            elif birthday[4] == 'ACES':
+                posted = True
+            elif birthday[4] == 'ACES' and not posted:
                 aces_api.update_with_media('picture.png', status)
-            elif birthday[4] == 'FE':
+                posted = True
+            elif (birthday[4] == 'FE' or birthday[4] == 'ENGAGE') and not posted:
+                print('entering')
                 fe_api.update_with_media('picture.png', status)
-        except tweepy.error.TweepError:
+                posted = True
+
+        except tweepy.error.TweepError as exc:
+            print(exc)
             continue
         break
 
@@ -75,7 +91,7 @@ def convert(birthday):
 # Main code starts here.
 day = datetime.date.today().day
 month = datetime.date.today().month
-date_to_find = str(month) + "|" + str(day)
+date_to_find = str(month) + "|" + str(day) + "|"
 
 # With the current day and month stored, the program will search in all databases for the characters whose birthday
 # is today. To do this, it seeks lines starting with "month|day". For example, 4|22 represents April 22nd.
@@ -88,4 +104,4 @@ for file in os.listdir("databases"):
 
             found = line.split('|')
             convert(found)
-            time.sleep(15)  # Cool-down so that Twitter does not think I'm running a spam bot.
+            time.sleep(10)  # Cool-down so that Twitter does not think I'm running a spam bot.
