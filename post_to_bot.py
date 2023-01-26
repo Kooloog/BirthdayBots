@@ -26,7 +26,6 @@ fe_api = tweepy.API(fe_auth)
 # Receives a month and a day as integers, and converts the date to a proper string like "July 13th" or "March 21st".
 def get_day_string(_month, _day):
     date_end = "th"
-    print(_day)
     if _day == '1' or _day == '21' or _day == '31':
         date_end = "st"
     elif _day == '2' or _day == '22':
@@ -34,7 +33,6 @@ def get_day_string(_month, _day):
     elif _day == '3' or _day == '23':
         date_end = "rd"
 
-    print(date_end)
     return calendar.month_name[int(_month)] + " " + str(_day) + date_end
 
 
@@ -76,7 +74,6 @@ def convert(birthday):
                 aces_api.update_with_media('picture.png', status)
                 posted = True
             elif (birthday[4] == 'FE' or birthday[4] == 'ENGAGE') and not posted:
-                print('entering')
                 fe_api.update_with_media('picture.png', status)
                 posted = True
 
