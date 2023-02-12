@@ -1,0 +1,2 @@
+2|12|Drago|SPECIES: Alligator@PERSONALITY: Lazy@DEBUT: New Leaf@CATCHPHRASE: burrrn@QUOTE: There is no room for two dragons in one pond.|
+2|12|Miriel|DEBUT: Awakening@STARTING CLASS: Mage@NATIONALITY: Ylisse@BIOGRAPHY: A serious and methodical Shepherd. Loves research and is knowledgeable on a wide range of subjects.@VOICE ARTISTS: Yurika Aizawa (JP), Tara Platt (EN)
