@@ -36,6 +36,19 @@ def get_day_string(_month, _day):
     return calendar.month_name[int(_month)] + " " + str(_day) + date_end
 
 
+# Appends alt text to the image, uploads to the servers, and then posts the tweet.
+def add_alt_text(api, birthday, status):
+    character_to_find = birthday[0] + '|' + birthday[1] + '|' + birthday[2] + '|'
+    alt_text_file = open('accessibility/_accessibility.txt', "r", encoding="utf8")
+
+    for entry in alt_text_file:
+        if entry.startswith(character_to_find):
+            media = api.media_upload('picture.png')
+            alt_text = '\n'.join(entry.split('|')[3].split('@'))
+            api.create_media_metadata(media.media_id, alt_text)
+            api.update_status(status, media_ids=[media.media_id])
+        
+
 # Gets all info from the character stored in the birthday variable, creates the necessary strings, downloads their
 # respective image from imgur and then posts the result on the right bot account.
 def convert(birthday):
@@ -68,13 +81,13 @@ def convert(birthday):
     while True:
         try:
             if birthday[4] == 'ACEN' and not posted:
-                acen_api.update_with_media('picture.png', status)
+                add_alt_text(acen_api, birthday, status)
                 posted = True
             elif birthday[4] == 'ACES' and not posted:
                 aces_api.update_with_media('picture.png', status)
                 posted = True
             elif (birthday[4] == 'FE' or birthday[4] == 'ENGAGE') and not posted:
-                fe_api.update_with_media('picture.png', status)
+                add_alt_text(fe_api, birthday, status)
                 posted = True
 
         except tweepy.error.TweepError as exc:
